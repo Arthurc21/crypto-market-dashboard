@@ -1,0 +1,9 @@
+.input {
+    & .label-container {
+        display: flex;
+        
+        & .required-icon {
+			color: $color-scale-dark-red;
+		}
+    }
+}

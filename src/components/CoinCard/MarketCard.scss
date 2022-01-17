@@ -1,0 +1,33 @@
+.market-card-contianer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    width: auto;
+    height: 100%;
+    background-color: transparent;
+    color: #333333;
+    width: 280px;
+    margin: 2rem;
+
+    .price-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+
+        .element-list {
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+    }
+
+    .card-header {
+        background-color: #f2f2f2;
+        .current-price-container {
+            font-size: 1.25rem;
+            letter-spacing: 0.125rem;
+            font-weight: 600;
+        }
+    }
+}
