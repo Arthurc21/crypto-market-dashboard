@@ -1,0 +1,30 @@
+.button {
+	width: 120px;
+	height: 30px;
+	background-color: #f7fbfc;
+	border: 1px solid #bbbbbb;
+    border-radius: 4px;
+	cursor: pointer;
+	outline: none;
+	display: inline-block;
+	vertical-align: middle;
+
+    &:hover {
+        border-color: #777777;
+        box-shadow: 0 0 10px 2px #888888;
+    }
+
+	&:disabled {
+		opacity: 50%;
+        //background-color: #b1b1b1;
+        border-color: #b1b1b1;
+        cursor: not-allowed;
+        box-shadow: none;
+	}
+
+	.text-wrapper {
+		font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 1px;
+	}
+}

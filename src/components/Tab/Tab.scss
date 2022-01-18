@@ -1,0 +1,14 @@
+.tab {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    height: fit-content;
+    width: fit-content;
+    background-color: #D0D9DD;
+
+    .span-wrapper {
+        font-weight: 600;
+        font-size: 20px;
+        margin: 12px 20px;
+        color: #FFFFFF;
+    }
+}
