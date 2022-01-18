@@ -1,9 +1,20 @@
 .dashboard {
-    .market-card-container {
-        display: flex;
-        flex-direction: row;
-        row-gap: 3rem;
-        background-color: lightblue;
-        width: fit-content;
-    }
+
+	.graphs-container {
+		margin: auto;
+
+		.tabs-container {
+			display: flex;
+			gap: 4px;
+			margin-bottom: 4px;
+		}
+	
+		.market-card-container {
+			display: flex;
+			flex-direction: row;
+			row-gap: 3rem;
+			background-color: #d0d9dd;
+			width: fit-content;
+		}
+	}
 }
