@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+# Crypto Comparator Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Summary
 
-## Available Scripts
+This implementation seeks to concentrate in one place the display of current and historical values of cryptocurrencies from different exchangers.
 
-In the project directory, you can run:
+### Objectives
+- Create an interface that will be divided into 2 parts, login and dashboard
+- Validate format of user data when loign
+- Show the current values of cryptocurrencies BTC, ETH AND XRP registered by 3 different exchangers
+- Update data every 15 seconds
+- Calculate and display the value of an exchange from MXN to the selected cryptocurrency based on the prices of the exchangers
 
-### `npm start`
+## To-Do
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Define project structure
+2. Define stack and tools to use
+3. Structure state
+4. Structure consumption of websockets and endpoints
+5. Define types
+6. Create UI Mockup
+7. Develop components
+8. Assign routes
+9. Connect components with state
+10. Write test
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Installing and running locally
 
-### `npm test`
+## To install the project dependencies
+``` shell script
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## To run locally with node
+Run the app in the development mode.
+``` shell script
+npm start
+```
 
-### `npm run build`
+## Building for production
+Build the app for production to the build folder.
+``` shell script
+npm run build
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Final Notes
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+I was not able to find sources that tracked data on Coinrex and Bitlem, so I opted to select 2 other exchanges within the top 10 of "Top Cryptocurrency Exchanges Ranking by Trust Score" by coingecko.com
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+https://www.coingecko.com/en/exchanges
