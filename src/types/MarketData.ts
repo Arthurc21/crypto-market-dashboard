@@ -1,4 +1,4 @@
-import { TickerData } from "./TickerData";
+import { TickerData } from './TickerData'
 
 export interface MarketData {
 	[key: string]: TickerData

@@ -1,5 +1,5 @@
-import { MarketData } from "./MarketData";
-import { MarketDataHistorical } from "./MarketData";
+import { MarketData } from './MarketData'
+import { MarketDataHistorical } from './MarketData'
 
 export interface CoinData {
 	[key: string]: MarketData
