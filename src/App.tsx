@@ -1,54 +1,98 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './App.scss'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { Dashboard } from './components/Dashboard/Dashboard'
 import { Login } from './components/Login/Login'
 import { useWebSocket } from './utilities/useWebSocket'
-import { subAll, subBinance, subBitso } from './utilities/messages'
+import { subscribeAll } from './utilities/messages'
 import { MessageResponse } from './types/MessageResponse'
-import { queue } from './utilities/queue'
+import { populateQueue } from './utilities/populateQueue'
 import { cleanData } from './utilities/cleanArray'
 import _ from 'lodash'
 import { CoinData, CoinDataHistorical } from './types/CoinData'
 import { MarketData } from './types/MarketData'
-require('dotenv').config()
+import { UserData } from './types/UserData'
+import { TickerData } from './types/TickerData'
 
-export const StoreContext = React.createContext({})
+export interface Store {
+	userData: UserData
+}
+
+const defaultUserData: UserData = {
+	firstName: '',
+	lastName: '',
+	email: '',
+	phone: ''
+}
+
+const defaultStore: Store = {
+	userData: defaultUserData
+}
+
+export const StoreContext = React.createContext<Store>(defaultStore)
 
 export default function App(): React.ReactElement {
-	const websocketUrl = process.env.WEBSOCKET_URL
-	const websocketKey = process.env.WEBSOCKET_KEY
+	const websocketUrl = 'wss://streamer.cryptocompare.com/v2'
+	const websocketKey = '21fc60de5f7a3b58fb608eac70d189cb4fd958e8041c017d6c9524f4eccd6db4'
 	const websocketFullUrl = `${websocketUrl}?api_key=${websocketKey}`
 	const websocket = useWebSocket(websocketFullUrl)
 	const updateTime = 15000
 
 	const [coinsData, setCoinsData] = useState<CoinData>({})
 	const [historicals, setHistoricals] = useState<CoinDataHistorical>({})
+	const [userData, setUserData] = useState<UserData>(defaultUserData)
+	const [dataEmpty, setDataEmpty] = useState<boolean>(true)
 	const dataRef = useRef({})
+	const historicalRef = useRef({})
 
 	const sendMessage = () => {
 		if (websocket && websocket.readyState === WebSocket.OPEN) {
-			websocket.send(JSON.stringify(subAll))
+			websocket.send(JSON.stringify(subscribeAll))
 		}
 	}
 
-	const updateHistoricalValues = (data: CoinData) => {
-		_.forEach(data, (coin) => {
-			_.forEach(coin, (market) => {
-				const currentCoin = market.baseSymbol
-				const currentMarket = market.market
-				if (historicals && currentCoin && currentMarket) {
-					const currentMarketHistorical = _.cloneDeep(historicals[currentCoin])
-					if (currentMarketHistorical) {
-						const currentMarketArray = currentMarketHistorical[currentMarket]
-						const newElement = cleanData(market, currentMarketArray[0])
-						const newArray = queue(newElement, currentMarketArray)
+	const checkDataAvailability = () => {
+		const historicalsMap = _.find(historicals, (coin) => {
+			const emptyMarket = _.find(coin, (market) => {
+				return market.length === 0
+			})
+			return !!emptyMarket
+		})
+		setDataEmpty(!!historicalsMap)
+	}
+
+	const updateHistoricalValues = (data: CoinData, coinDataHistorical: CoinDataHistorical) => {
+		console.log('%cupdateHistoricalValues', 'color: orange')
+		_.forEach(data, (market) => {
+			_.forEach(market, (ticker) => {
+				const currentCoin = ticker.baseSymbol
+				const currentMarket = ticker.market
+				if (coinDataHistorical && currentCoin && currentMarket) {
+					let currentMarketHistorical = _.cloneDeep(coinDataHistorical)
+					let tickerList: Array<TickerData> = []
+					if (currentMarketHistorical[currentCoin] === undefined) {
+						const tickerClean = cleanData(ticker)
 						setHistoricals((prevState) => {
 							return {
 								...prevState,
 								[currentCoin]: {
 									...prevState[currentCoin],
-									[currentMarket]: newArray
+									[currentMarket]: [tickerClean]
+								}
+							}
+						})
+					} else {
+						const tickerArrayRef = currentMarketHistorical[currentCoin][currentMarket]
+						console.log('ticker before', ticker)
+						const tickerClean = cleanData(ticker, tickerArrayRef[0])
+						console.log('ticker after', tickerClean)
+						tickerList = populateQueue(tickerClean, tickerArrayRef)
+						setHistoricals((prevState) => {
+							return {
+								...prevState,
+								[currentCoin]: {
+									...prevState[currentCoin],
+									[currentMarket]: tickerList
 								}
 							}
 						})
@@ -60,11 +104,12 @@ export default function App(): React.ReactElement {
 
 	useEffect(() => {
 		dataRef.current = coinsData
+		historicalRef.current = historicals
 	})
 
 	useEffect(() => {
 		const interval = setInterval(() => {
-			updateHistoricalValues(dataRef.current)
+			updateHistoricalValues(dataRef.current, historicalRef.current)
 		}, updateTime)
 		return () => clearInterval(interval)
 	}, [])
@@ -73,7 +118,6 @@ export default function App(): React.ReactElement {
 		if (websocket) {
 			const handleSocketMessage = (event: MessageEvent) => {
 				const message: MessageResponse = JSON.parse(event.data)
-				console.log('websocket message', message)
 				if (message.TYPE === '20') {
 					sendMessage()
 				}
@@ -106,13 +150,23 @@ export default function App(): React.ReactElement {
 		}
 	}, [websocket])
 
+	useEffect(() => {
+		if (dataEmpty) {
+			checkDataAvailability()
+		}
+	}, [coinsData])
+
 	return (
-		<StoreContext.Provider value={{}}>
+		<StoreContext.Provider value={{ userData }}>
 			<div className="App">
 				<Router>
 					<Routes>
-						<Route path="/login" element={<Login />} />
-						<Route path="/dashboard" element={<Dashboard store={historicals} displayData={false} />} />
+						<Route path="/" element={<Navigate to={'/login'} />} />
+						<Route path="/login" element={<Login onSubmit={(userData) => setUserData(userData)} />} />
+						<Route
+							path="/dashboard"
+							element={<Dashboard historicalData={historicals} displayData={!dataEmpty} />}
+						/>
 					</Routes>
 				</Router>
 			</div>
