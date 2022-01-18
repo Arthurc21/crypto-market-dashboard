@@ -1,15 +1,17 @@
 import { TickerData } from '../types/TickerData'
 import _ from 'lodash'
 
-export const cleanData = (data: TickerData, prevData?: TickerData) => {
+export const formatData = (data: TickerData, conversionRate: number, prevData?: TickerData) => {
 	const newData = { ...data }
 	let date = new Date()
 	let timestamp = date.getTime()
 	newData.lastUpdate = timestamp
 	if (data.price === undefined) {
-		if (prevData) {
-			newData.price = prevData.price
+		if (prevData && prevData.price) {
+			newData.price = prevData.price * conversionRate
 		} else newData.price = 0
+	} else {
+		newData.price = data.price * conversionRate
 	}
 	return newData
 }
