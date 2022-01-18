@@ -1,22 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './App.scss'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { Dashboard } from './components/Dashboard/Dashboard'
-import { Login } from './components/Login/Login'
-import { useWebSocket } from './utilities/useWebSocket'
-import { subscribeAll } from './utilities/messages'
+import { useWebSocket } from './hooks/useWebSocket'
 import { MessageResponse } from './types/MessageResponse'
-import { populateQueue } from './utilities/populateQueue'
-import { cleanData } from './utilities/cleanArray'
-import _ from 'lodash'
-import { CoinData, CoinDataHistorical } from './types/CoinData'
 import { MarketData } from './types/MarketData'
 import { UserData } from './types/UserData'
 import { TickerData } from './types/TickerData'
-
-export interface Store {
-	userData: UserData
-}
+import { CoinData, CoinDataHistorical } from './types/CoinData'
+import { Store } from './types/Store'
+import { subscribeAll } from './utilities/messages'
+import { populateQueue } from './utilities/populateQueue'
+import { formatData } from './utilities/formatData'
+import { checkDataAvailability } from './utilities/checkDataAvailability'
+import { Dashboard } from './components/Dashboard/Dashboard'
+import { Login } from './components/Login/Login'
+import { getUsdMxnConversionRate } from './connectivity/getUsdMxnConversionRate'
+import _ from 'lodash'
 
 const defaultUserData: UserData = {
 	firstName: '',
@@ -36,14 +35,15 @@ export default function App(): React.ReactElement {
 	const websocketKey = '21fc60de5f7a3b58fb608eac70d189cb4fd958e8041c017d6c9524f4eccd6db4'
 	const websocketFullUrl = `${websocketUrl}?api_key=${websocketKey}`
 	const websocket = useWebSocket(websocketFullUrl)
-	const updateTime = 15000
-
 	const [coinsData, setCoinsData] = useState<CoinData>({})
 	const [historicals, setHistoricals] = useState<CoinDataHistorical>({})
 	const [userData, setUserData] = useState<UserData>(defaultUserData)
 	const [dataEmpty, setDataEmpty] = useState<boolean>(true)
+	const [usdMxnConversionRate, setUsdMxnConversionRate] = useState<number>(1)
 	const dataRef = useRef({})
 	const historicalRef = useRef({})
+	const conversionRateRef = useRef(1)
+	let updateTime = 15000
 
 	const sendMessage = () => {
 		if (websocket && websocket.readyState === WebSocket.OPEN) {
@@ -51,17 +51,7 @@ export default function App(): React.ReactElement {
 		}
 	}
 
-	const checkDataAvailability = () => {
-		const historicalsMap = _.find(historicals, (coin) => {
-			const emptyMarket = _.find(coin, (market) => {
-				return market.length === 0
-			})
-			return !!emptyMarket
-		})
-		setDataEmpty(!!historicalsMap)
-	}
-
-	const updateHistoricalValues = (data: CoinData, coinDataHistorical: CoinDataHistorical) => {
+	const updateHistoricalValues = (data: CoinData, coinDataHistorical: CoinDataHistorical, conversionRate: number) => {
 		console.log('%cupdateHistoricalValues', 'color: orange')
 		_.forEach(data, (market) => {
 			_.forEach(market, (ticker) => {
@@ -71,7 +61,7 @@ export default function App(): React.ReactElement {
 					let currentMarketHistorical = _.cloneDeep(coinDataHistorical)
 					let tickerList: Array<TickerData> = []
 					if (currentMarketHistorical[currentCoin] === undefined) {
-						const tickerClean = cleanData(ticker)
+						const tickerClean = formatData(ticker, conversionRate)
 						setHistoricals((prevState) => {
 							return {
 								...prevState,
@@ -83,9 +73,7 @@ export default function App(): React.ReactElement {
 						})
 					} else {
 						const tickerArrayRef = currentMarketHistorical[currentCoin][currentMarket]
-						console.log('ticker before', ticker)
-						const tickerClean = cleanData(ticker, tickerArrayRef[0])
-						console.log('ticker after', tickerClean)
+						const tickerClean = formatData(ticker, conversionRate, tickerArrayRef[0])
 						tickerList = populateQueue(tickerClean, tickerArrayRef)
 						setHistoricals((prevState) => {
 							return {
@@ -102,16 +90,23 @@ export default function App(): React.ReactElement {
 		})
 	}
 
+	const setRate = async () => {
+		const rate = await getUsdMxnConversionRate()
+		setUsdMxnConversionRate(rate)
+	}
+
 	useEffect(() => {
 		dataRef.current = coinsData
 		historicalRef.current = historicals
+		conversionRateRef.current = usdMxnConversionRate
 	})
 
 	useEffect(() => {
+		setRate()
 		const interval = setInterval(() => {
-			updateHistoricalValues(dataRef.current, historicalRef.current)
+			updateHistoricalValues(dataRef.current, historicalRef.current, conversionRateRef.current)
 		}, updateTime)
-		return () => clearInterval(interval)
+		return () => clearInterval(interval) 
 	}, [])
 
 	useEffect(() => {
@@ -131,10 +126,10 @@ export default function App(): React.ReactElement {
 								[coin]: {
 									...prevState[coin],
 									[market]: {
-										baseSymbol: message.FROMSYMBOL,
-										targetSymbol: message.TOSYMBOL,
-										market: message.MARKET,
-										price: message.PRICE,
+										baseSymbol: message.FROMSYMBOL ? message.FROMSYMBOL : '',
+										targetSymbol: message.TOSYMBOL ? message.TOSYMBOL : '',
+										market: message.MARKET ? message.MARKET : '',
+										price: message.PRICE ? message.PRICE : 0,
 										lastUpdate: message.LASTUPDATE
 									}
 								}
@@ -151,13 +146,11 @@ export default function App(): React.ReactElement {
 	}, [websocket])
 
 	useEffect(() => {
-		if (dataEmpty) {
-			checkDataAvailability()
-		}
+		setDataEmpty(!!checkDataAvailability(historicals))
 	}, [coinsData])
 
 	return (
-		<StoreContext.Provider value={{ userData }}>
+		<StoreContext.Provider value={{ userData: userData, currentUsdMxnRateConversion: usdMxnConversionRate }}>
 			<div className="App">
 				<Router>
 					<Routes>
@@ -165,7 +158,7 @@ export default function App(): React.ReactElement {
 						<Route path="/login" element={<Login onSubmit={(userData) => setUserData(userData)} />} />
 						<Route
 							path="/dashboard"
-							element={<Dashboard historicalData={historicals} displayData={!dataEmpty} />}
+							element={<Dashboard historicalData={historicals} displayData={dataEmpty} />}
 						/>
 					</Routes>
 				</Router>
