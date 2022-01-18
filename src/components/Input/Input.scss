@@ -1,9 +1,31 @@
 .input {
-    & .label-container {
-        display: flex;
-        
-        & .required-icon {
-			color: $color-scale-dark-red;
+	width: fit-content;
+
+	& .label-container {
+		display: flex;
+		margin-bottom: 0.25rem;
+		font-size: 12px;
+		line-height: 14px;
+		font-weight: 700;
+
+		& .required-icon {
+			color: #970c25;
 		}
-    }
+	}
+
+	& .input-container {
+		& input {
+            background: #f2f2f2;
+            border: 0;
+            border-radius: 4px;
+            box-sizing: border-box;
+			width: 100%;
+			color: #333333;
+			font-weight: 400;
+			font-size: 12px;
+			letter-spacing: 0.43px;
+            padding: 15px;
+            outline: 0;
+		}
+	}
 }

@@ -6,8 +6,8 @@
     height: 100%;
     background-color: transparent;
     color: #333333;
-    width: 280px;
-    margin: 2rem;
+    width: 300px;
+    margin: 1.25rem;
 
     .price-list {
         display: flex;
@@ -19,15 +19,27 @@
             display: flex;
             justify-content: space-between;
             flex-direction: row;
+            line-height: 24px;
+            padding: 0 8px;
         }
     }
 
     .card-header {
         background-color: #f2f2f2;
+
         .current-price-container {
+            height: 32px;
+            display: flex;
             font-size: 1.25rem;
             letter-spacing: 0.125rem;
             font-weight: 600;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .market-span {
+            font-weight: 500;
+            letter-spacing: 0.0625rem;
         }
     }
 }
