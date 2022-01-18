@@ -1,42 +1,44 @@
 .login-container {
-    position: relative;
-    min-width: 600px;
-    max-width: 1000px;
-    background-color: #fcfcfc; //d0d9dd
-    padding: 30px 60px;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50px;
-    transition: all 0.3s ease;
-    
+	position: relative;
+	min-width: 600px;
+	max-width: 1000px;
+	background-color: #fcfcfc; //d0d9dd
+	padding: 30px 60px;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	border-radius: 50px;
+	transition: all 0.3s ease;
 
-    h1 {
-        text-align: center;
-        color: #333333;
-        letter-spacing: 2px;
-    }
+	h1 {
+		text-align: center;
+		color: #333333;
+		letter-spacing: 2px;
+	}
 
-    p {
-        color: #333333;
-    }
+	p {
+		color: #333333;
+		font-size: 16px;
+		margin-bottom: 8px;
+	}
 
-    .input-wrapper {
-        margin-bottom: 18px;
-    }
-    .name-container {
-        display: flex;
-        flex-direction: row;
-        align-items: flex-end;
-        gap: 18px;
-    }
+	.input-wrapper {
+		margin-bottom: 18px;
+	}
 
-    .button-wrapper {
-        width: fit-content;
-        margin: 16px auto 0 auto;
-    }
+	.name-container {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		gap: 18px;
+	}
+
+	.button-wrapper {
+		width: fit-content;
+		margin: 16px auto 0 auto;
+	}
 }
 
 .login-container:hover {
-    box-shadow: 5px 10px 8px #7591AC;
+	box-shadow: 5px 10px 8px #7591ac;
 }

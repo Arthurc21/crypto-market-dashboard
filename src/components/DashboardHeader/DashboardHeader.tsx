@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
-import { Store, StoreContext } from '../../App'
+import { StoreContext } from '../../App'
 import { UserData } from '../../types/UserData'
-import _ from 'lodash'
+import { Store } from '../../types/Store'
 import { useNavigate } from 'react-router-dom'
+import './DashboardHeader.scss'
+import _ from 'lodash'
 
 const defaultUserData: UserData = {
 	firstName: '',
@@ -22,5 +24,11 @@ export const DashboardHeader = (): React.ReactElement => {
 		}
 	}, [])
 
-	return <span>{userData.firstName}</span>
+	return (
+		<header>
+			<p>{`Welcome ${userData.firstName} ${userData.lastName}`}</p>
+			<p>{`Email: ${userData.email}`}</p>
+			<p>{`Phone number: ${userData.phone}`}</p>
+		</header>
+	)
 }

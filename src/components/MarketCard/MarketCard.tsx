@@ -37,9 +37,7 @@ export const MarketCard = ({ market, lastPrices }: MarketCardProps): React.React
 	const getStatusIcon = () => {
 		if (lastPrices) {
 			const currentPrice = lastPrices[0].price
-			const prevPrice = lastPrices[1].price
-			console.log('currentPrice', currentPrice)
-			console.log('prevPrice', prevPrice)
+			const prevPrice = lastPrices[1] ? lastPrices[1].price : 0
 			if (currentPrice && prevPrice) {
 				if (currentPrice > prevPrice) {
 					return <TriangleUpIcon fill={greenColor} size="medium" />
@@ -57,9 +55,9 @@ export const MarketCard = ({ market, lastPrices }: MarketCardProps): React.React
 			<div className="card-header">
 				<div className="current-price-container">
 					{getStatusIcon()}
-					<span>{formatPriceValue()}</span>
+					<span>{(lastPrices && lastPrices[0].price !== undefined) ? formatPriceValue() : 'Loading'}</span>
 				</div>
-				<span className="market-span">{market.toUpperCase()}</span>
+				<span className="market-span">{market ? market.toUpperCase() : ''}</span>
 			</div>
 			<div className="price-list">
 				{historicalPrices.map((element, index) => {

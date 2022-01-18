@@ -1,20 +1,56 @@
 .dashboard {
+	.dashboard-header {
+		margin-bottom: 120px;
+	}
 
-	.graphs-container {
+	.dashboard-main {
 		margin: auto;
+		width: min-content;
 
-		.tabs-container {
-			display: flex;
-			gap: 4px;
-			margin-bottom: 4px;
+		.graphs-container {
+			margin: auto;
+
+			.tabs-container {
+				display: flex;
+				gap: 4px;
+				margin-bottom: 4px;
+			}
+
+			.market-card-container {
+				display: flex;
+				flex-direction: row;
+				row-gap: 3rem;
+				background-color: #d0d9dd;
+				width: fit-content;
+			}
 		}
-	
-		.market-card-container {
+
+		.convert-section-container {
 			display: flex;
 			flex-direction: row;
-			row-gap: 3rem;
+			padding: 16px 8px;
 			background-color: #d0d9dd;
-			width: fit-content;
+			margin-top: 4px;
+
+			.input-convert-container {
+				display: flex;
+				flex-direction: column;
+				width: 180px;
+				align-items: center;
+			}
+
+			.conversion-list-container {
+				display: flex;
+				flex-direction: row;
+
+				.market-conversion {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					width: 200px;
+					margin: auto 16px;
+				}
+			}
 		}
 	}
 }

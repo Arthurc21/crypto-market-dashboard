@@ -1,14 +1,18 @@
 .tab {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    height: fit-content;
-    width: fit-content;
-    background-color: #D0D9DD;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	height: fit-content;
+	width: fit-content;
+	background-color: #d0d9dd;
 
-    .span-wrapper {
-        font-weight: 600;
-        font-size: 20px;
-        margin: 12px 20px;
-        color: #FFFFFF;
-    }
+	&.selected {
+		background-color: #bfdee7;
+	}
+
+	.span-wrapper {
+		font-weight: 600;
+		font-size: 20px;
+		margin: 12px 20px;
+		color: #ffffff;
+	}
 }
