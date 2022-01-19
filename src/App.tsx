@@ -31,8 +31,8 @@ const defaultStore: Store = {
 export const StoreContext = React.createContext<Store>(defaultStore)
 
 export default function App(): React.ReactElement {
-	const websocketUrl = 'wss://streamer.cryptocompare.com/v2'
-	const websocketKey = '21fc60de5f7a3b58fb608eac70d189cb4fd958e8041c017d6c9524f4eccd6db4'
+	const websocketUrl = process.env.REACT_APP_WEBSOCKET_URL
+	const websocketKey = process.env.REACT_APP_WEBSOCKET_KEY
 	const websocketFullUrl = `${websocketUrl}?api_key=${websocketKey}`
 	const websocket = useWebSocket(websocketFullUrl)
 	const [coinsData, setCoinsData] = useState<CoinData>({})

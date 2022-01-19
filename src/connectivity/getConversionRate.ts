@@ -1,9 +1,9 @@
 export const getConversionRate = async (from: string, to: string) => {
-	const fixerApikey = 'c126a853865e3acfc3efb776474b538a'
-	const fixerApiUrl = 'https://data.fixer.io/api/convert'
-	const fixerFullUrl = `${fixerApiUrl}?access_key=${fixerApikey}&from=${from}&to=${to}&amount=1`
+	const apiKey = process.env.REACT_APP_API_KEY
+	const apiUrl = process.env.REACT_APP_API_URL
+	const fullUrl = `${apiUrl}?access_key=${apiKey}&from=${from}&to=${to}&amount=1`
 
-	const value = await fetch(fixerFullUrl, { method: 'GET' })
+	const value = await fetch(fullUrl, { method: 'GET' })
 		.then(async (response: Response) => {
 			if (response.ok) {
 				return await response.json().then((responseJson) => {
