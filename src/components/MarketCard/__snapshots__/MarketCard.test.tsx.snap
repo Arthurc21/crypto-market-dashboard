@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input Testing input snapshot 1`] = `
+<div
+  className="market-card-contianer"
+>
+  <div
+    className="card-header"
+  >
+    <div
+      className="current-price-container"
+    >
+      <span>
+        0
+      </span>
+    </div>
+    <span
+      className="market-span"
+    >
+      MARKETTEXT
+    </span>
+  </div>
+  <div
+    className="price-list"
+  />
+</div>
+`;

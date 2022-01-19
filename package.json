@@ -23,6 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:update": "react-scripts test --updateSnapshot",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.178",
+    "@types/react-test-renderer": "^17.0.1",
     "node-sass": "^7.0.1",
     "prettier": "2.5.1"
   }

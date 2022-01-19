@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tab Testing tab snapshot 1`] = `
+<div
+  className="tab selected"
+  onClick={[Function]}
+>
+  <div
+    className="span-wrapper selected"
+  >
+    <span>
+      tabText
+    </span>
+  </div>
+</div>
+`;

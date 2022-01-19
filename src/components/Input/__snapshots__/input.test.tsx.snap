@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Input Testing input snapshot 1`] = `
+<div
+  className="input label-position-top"
+>
+  <div
+    className="label-container position-top"
+  >
+    <label
+      className="input-label"
+      htmlFor="inputTest-input"
+    >
+      inputTest
+    </label>
+    <div
+      className="required-icon"
+    >
+       *
+    </div>
+  </div>
+  <div
+    className="input-container"
+  >
+    <div
+      className="input-wrapper"
+    >
+      <input
+        className=""
+        onChange={[Function]}
+        placeholder="test"
+        type="text"
+        value="inputTest"
+      />
+    </div>
+    <div
+      className="error-message-container"
+    >
+      <p
+        className="error-message"
+      />
+    </div>
+  </div>
+</div>
+`;
