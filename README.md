@@ -24,6 +24,13 @@ This implementation seeks to concentrate in one place the display of current and
 9. Connect components with state
 10. Write test
 
+## Test
+- Snapshot creation
+- Components rendering
+- Components feature testing
+- Unit tests for utilities functions
+
+
 # Installing and running locally
 
 ## To install the project dependencies
@@ -41,6 +48,17 @@ npm start
 Build the app for production to the build folder.
 ``` shell script
 npm run build
+```
+
+## Testing project
+Launches the test runner in the interactive watch mode.
+``` shell script
+npm test
+```
+
+For updating snapshots
+``` shell script
+npm run test:update
 ```
 
 # Final Notes
