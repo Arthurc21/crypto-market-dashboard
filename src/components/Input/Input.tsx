@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from 'react'
+import { forwardRef } from 'react'
 import './Input.scss'
 
 interface InputProps {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { TickerData } from '../../types/TickerData'
 import './MarketCard.scss'
 import { TriangleUpIcon, TriangleDownIcon, DashIcon } from '@primer/octicons-react'
@@ -55,17 +55,16 @@ export const MarketCard = ({ market, lastPrices }: MarketCardProps): React.React
 			<div className="card-header">
 				<div className="current-price-container">
 					{getStatusIcon()}
-					<span>{(lastPrices && lastPrices[0].price !== undefined) ? formatPriceValue() : 'Loading'}</span>
+					<span>{(lastPrices && lastPrices[0].price !== undefined) ? formatPriceValue() : '0'}</span>
 				</div>
-				<span className="market-span">{market ? market.toUpperCase() : ''}</span>
+				<span className="market-span">{market ? market.toUpperCase() : 'LOADING'}</span>
 			</div>
 			<div className="price-list">
 				{historicalPrices.map((element, index) => {
-					//console.log('element', element)
 					return (
 						<div key={`price-${index}`} className="element-list">
 							<span>{element.lastUpdate ? formatDate(element.lastUpdate) : ''}</span>
-							<span>{element.price ? formattPrice.format(element.price) : ''}</span>
+							<span>{element.price ? formattPrice.format(element.price) : '0.0'}</span>
 						</div>
 					)
 				})}

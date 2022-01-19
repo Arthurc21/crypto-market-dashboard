@@ -11,7 +11,7 @@ interface TabProps {
 export const Tab: React.FC<TabProps> = ({ text, value, onClick, selected = false }: TabProps) => {
 	return (
 		<div className={`tab ${selected ? 'selected' : ''}`} onClick={() => onClick(value)}>
-			<div className="span-wrapper">
+			<div className={`span-wrapper ${selected ? 'selected' : ''}`}>
 				<span>{text}</span>
 			</div>
 		</div>

@@ -95,7 +95,7 @@ export const Login = ({ onSubmit }: LoginProps): React.ReactElement => {
 				/>
 			</div>
 			<div className="button-wrapper">
-				<Button text="Continue" onClick={() => handleSubmit()} disabled={submitDisabled} />
+				<Button id='button-submit-user-data' text="Continue" onClick={() => handleSubmit()} disabled={submitDisabled} />
 			</div>
 		</div>
 	)

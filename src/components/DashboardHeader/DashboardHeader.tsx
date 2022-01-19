@@ -22,7 +22,7 @@ export const DashboardHeader = (): React.ReactElement => {
 		if (_.isEqual(userData, defaultUserData)) {
 			navigate('/login')
 		}
-	}, [])
+	}, [navigate, userData])
 
 	return (
 		<header>

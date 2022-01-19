@@ -9,13 +9,11 @@ import { MarketDataHistorical } from '../../types/MarketData'
 import { symbolValueConversion } from '../../utilities/symbolValueConversion'
 import _ from 'lodash'
 
-
 interface DashboardProps {
 	historicalData: CoinDataHistorical
-	displayData: boolean
 }
 
-export const Dashboard = ({ historicalData, displayData = false }: DashboardProps): React.ReactElement => {
+export const Dashboard = ({ historicalData }: DashboardProps): React.ReactElement => {
 	const [currentCoin, setCurrentCoin] = useState('BTC')
 	const [marketData, setMarketData] = useState<MarketDataHistorical>({})
 	const [availableMarkets, setAvailableMarkets] = useState<Array<string>>([])
@@ -29,10 +27,6 @@ export const Dashboard = ({ historicalData, displayData = false }: DashboardProp
 		setAvailableCoins(_.keys(historicalData))
 		setAvailableMarkets(_.keys(historicalData[currentCoin]))
 	}, [historicalData, currentCoin])
-
-	useEffect(() => {
-		console.log('displayData', displayData)
-	}, [displayData])
 
 	return (
 		<div className="dashboard">
@@ -55,19 +49,17 @@ export const Dashboard = ({ historicalData, displayData = false }: DashboardProp
 						})}
 					</div>
 					<div className="card-list">
-						{displayData && (
-							<div className="market-card-container">
-								{availableMarkets.map((market) => {
-									return (
-										<MarketCard
-											key={`market-card-${currentCoin}-${market}`}
-											market={market}
-											lastPrices={marketData[market]}
-										/>
-									)
-								})}
-							</div>
-						)}
+						<div className="market-card-container">
+							{availableMarkets.map((market) => {
+								return (
+									<MarketCard
+										key={`market-card-${currentCoin}-${market}`}
+										market={market}
+										lastPrices={marketData[market]}
+									/>
+								)
+							})}
+						</div>
 					</div>
 				</div>
 				<div className="convert-section-container">
@@ -75,7 +67,7 @@ export const Dashboard = ({ historicalData, displayData = false }: DashboardProp
 						<span>CONVERT</span>
 						<Input
 							id="input-convert-coin"
-							label="MXN"
+							label="MXN $"
 							labelPosition="left"
 							value={inputValue > 0 ? inputValue.toString() : ''}
 							short={true}
