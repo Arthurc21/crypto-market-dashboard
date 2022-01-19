@@ -14,7 +14,7 @@ import { formatData } from './utilities/formatData'
 import { checkDataAvailability } from './utilities/checkDataAvailability'
 import { Dashboard } from './components/Dashboard/Dashboard'
 import { Login } from './components/Login/Login'
-import { getUsdMxnConversionRate } from './connectivity/getUsdMxnConversionRate'
+import { getConversionRate } from './connectivity/getConversionRate'
 import _ from 'lodash'
 
 const defaultUserData: UserData = {
@@ -38,13 +38,13 @@ export default function App(): React.ReactElement {
 	const [coinsData, setCoinsData] = useState<CoinData>({})
 	const [historicals, setHistoricals] = useState<CoinDataHistorical>({})
 	const [userData, setUserData] = useState<UserData>(defaultUserData)
-	const [dataEmpty, setDataEmpty] = useState<boolean>(true)
 	const [usdMxnConversionRate, setUsdMxnConversionRate] = useState<number>(1)
+	const [updateTime, setUpdateTime] = useState<number>(1000)
 	const dataRef = useRef({})
 	const historicalRef = useRef({})
 	const conversionRateRef = useRef(1)
-	let updateTime = 15000
-
+	const counter = useRef(0)
+	
 	const sendMessage = () => {
 		if (websocket && websocket.readyState === WebSocket.OPEN) {
 			websocket.send(JSON.stringify(subscribeAll))
@@ -52,7 +52,6 @@ export default function App(): React.ReactElement {
 	}
 
 	const updateHistoricalValues = (data: CoinData, coinDataHistorical: CoinDataHistorical, conversionRate: number) => {
-		console.log('%cupdateHistoricalValues', 'color: orange')
 		_.forEach(data, (market) => {
 			_.forEach(market, (ticker) => {
 				const currentCoin = ticker.baseSymbol
@@ -91,7 +90,7 @@ export default function App(): React.ReactElement {
 	}
 
 	const setRate = async () => {
-		const rate = await getUsdMxnConversionRate()
+		const rate = await getConversionRate('USD', 'MXN')
 		setUsdMxnConversionRate(rate)
 	}
 
@@ -99,15 +98,19 @@ export default function App(): React.ReactElement {
 		dataRef.current = coinsData
 		historicalRef.current = historicals
 		conversionRateRef.current = usdMxnConversionRate
+		if (counter.current > 8) {
+			setUpdateTime(15000)
+		}
 	})
 
 	useEffect(() => {
 		setRate()
 		const interval = setInterval(() => {
 			updateHistoricalValues(dataRef.current, historicalRef.current, conversionRateRef.current)
+			counter.current = counter.current + 1
 		}, updateTime)
 		return () => clearInterval(interval) 
-	}, [])
+	}, [updateTime])
 
 	useEffect(() => {
 		if (websocket) {
@@ -143,11 +146,7 @@ export default function App(): React.ReactElement {
 				websocket.removeEventListener('message', handleSocketMessage)
 			}
 		}
-	}, [websocket])
-
-	useEffect(() => {
-		setDataEmpty(!!checkDataAvailability(historicals))
-	}, [coinsData])
+	}, [websocket, coinsData, sendMessage, historicals])
 
 	return (
 		<StoreContext.Provider value={{ userData: userData, currentUsdMxnRateConversion: usdMxnConversionRate }}>
@@ -158,7 +157,7 @@ export default function App(): React.ReactElement {
 						<Route path="/login" element={<Login onSubmit={(userData) => setUserData(userData)} />} />
 						<Route
 							path="/dashboard"
-							element={<Dashboard historicalData={historicals} displayData={dataEmpty} />}
+							element={<Dashboard historicalData={historicals}/>}
 						/>
 					</Routes>
 				</Router>
