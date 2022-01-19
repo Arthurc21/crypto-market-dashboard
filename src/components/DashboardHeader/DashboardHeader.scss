@@ -1,14 +1,20 @@
 header {
 	position: relative;
 	top: 0;
-	margin-left: 2rem;
-	height: 60px;
+	padding-left: 2rem;
+	padding: 1rem 0 1rem 2rem;
+	height: 100%;
+	background: hsla(209, 25%, 59%, 1);
+	background: linear-gradient(90deg, hsla(209, 25%, 59%, 1) 0%, hsla(194, 45%, 83%, 1) 88%);
+	filter: unquote(
+		'DXImageTransform.Microsoft.gradient( startColorstr="#7d98b1", endColorstr="#bfdee7", GradientType=1 )'
+	);
 }
 
 p {
 	font-size: 18px;
 	line-height: 18px;
-	color: #333333;
+	color: #141414;
 	font-weight: 600;
 	margin: 4px auto;
 }

@@ -1,18 +1,23 @@
 .tab {
-	border-top-left-radius: 6px;
-	border-top-right-radius: 6px;
-	height: fit-content;
-	width: fit-content;
-	background-color: #d0d9dd;
-
-	&.selected {
-		background-color: #bfdee7;
-	}
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    height: fit-content;
+    width: fit-content;
+    background-color: #fcfcfc;
 
 	.span-wrapper {
-		font-weight: 600;
-		font-size: 20px;
-		margin: 12px 20px;
-		color: #ffffff;
-	}
+        font-weight: 600;
+        font-size: 20px;
+        margin: 12px 20px;
+        color: #333333;
+
+		&.selected {
+			color: #FFFFFF;
+		}
+    }
+
+    &.selected {
+        background-color: #bfdee7;
+		color: #FFFFFF;
+    }
 }
